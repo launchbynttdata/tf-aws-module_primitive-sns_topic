@@ -2,6 +2,7 @@ package testimpl
 
 import (
 	"context"
+	"strings"
 	"testing"
 
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -40,11 +41,15 @@ func TestComposableCompleteReadonly(t *testing.T, ctx types.TestContext) {
 		name := terraform.Output(t, opts, "name")
 		id := terraform.Output(t, opts, "id")
 		owner := terraform.Output(t, opts, "owner")
+		arnParts := strings.SplitN(arn, ":", 6)
+		require.Len(t, arnParts, 6, "ARN should have 6 sections")
+		nameFromArn := arnParts[5]
+		ownerFromArn := arnParts[4]
 
 		assert.Equal(t, arn, id, "id should equal arn")
 		assert.Contains(t, arn, "arn:aws:sns:", "ARN should have SNS format")
-		assert.NotEmpty(t, name, "name should be set")
-		assert.NotEmpty(t, owner, "owner should be set")
+		assert.Equal(t, nameFromArn, name, "name should match ARN topic name")
+		assert.Equal(t, ownerFromArn, owner, "owner should match ARN account ID")
 	})
 
 	t.Run("TestSNSTopicViaAPI", func(t *testing.T) {
