@@ -5,17 +5,7 @@
 
 ## Overview
 
-This Terraform module creates an [AWS SNS Topic](https://registry.terraform.io/providers/hashicorp/aws/5.100.0/docs/resources/sns_topic) resource. It exposes all provider-supported arguments for comprehensive configuration including encryption, FIFO topics, delivery policies, and message delivery feedback.
-
-## Pre-Commit Hooks
-
-The [.pre-commit-config.yaml](.pre-commit-config.yaml) file defines `pre-commit` hooks for Terraform, Go, and common linting. The `commitlint` hook enforces conventional commit format. The `detect-secrets-hook` prevents new secrets from being introduced into the baseline. See [pre-commit documentation](https://pre-commit.com/) for installation.
-
-To install the commit-msg hook for commitlint:
-
-```
-pre-commit install --hook-type commit-msg
-```
+This Terraform module creates an [AWS SNS Topic](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic) resource. It exposes all provider-supported arguments for comprehensive configuration including encryption, FIFO topics, delivery policies, and message delivery feedback.
 
 ## Usage
 
@@ -83,17 +73,6 @@ No modules.
 | <a name="output_owner"></a> [owner](#output\_owner) | The AWS Account ID of the SNS topic owner. |
 | <a name="output_tags_all"></a> [tags\_all](#output\_tags\_all) | Map of tags assigned to the resource, including those inherited from the provider. |
 <!-- END_TF_DOCS -->
-
-## Testing
-
-1. Run `make configure` to install dependencies.
-2. For AWS, set credentials via `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_DEFAULT_REGION` (or use `make env` if configured).
-3. Create `provider.tf` and `terraform.tfvars` in the example directory as needed for your environment.
-4. Run `make check` to execute lint, validate, plan, and Terratest.
-
-## License
-
-Apache 2.0. See [LICENSE](LICENSE) for details.
 
 ## Module Development
 
