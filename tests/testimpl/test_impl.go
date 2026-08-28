@@ -24,7 +24,7 @@ func TestComposableComplete(t *testing.T, ctx types.TestContext) {
 
 	t.Run("TestSNSPublish", func(t *testing.T) {
 		client := getSNSClient(t)
-		topicArn := terraform.Output(t, ctx.TerratestTerraformOptions(), "arn")
+		topicArn := terraform.OutputContext(t, context.Background(), ctx.TerratestTerraformOptions(), "arn")
 
 		_, err := client.Publish(context.Background(), &sns.PublishInput{
 			TopicArn: &topicArn,
@@ -37,10 +37,10 @@ func TestComposableComplete(t *testing.T, ctx types.TestContext) {
 func TestComposableCompleteReadonly(t *testing.T, ctx types.TestContext) {
 	t.Run("TestTerraformOutputs", func(t *testing.T) {
 		opts := ctx.TerratestTerraformOptions()
-		arn := terraform.Output(t, opts, "arn")
-		name := terraform.Output(t, opts, "name")
-		id := terraform.Output(t, opts, "id")
-		owner := terraform.Output(t, opts, "owner")
+		arn := terraform.OutputContext(t, context.Background(), opts, "arn")
+		name := terraform.OutputContext(t, context.Background(), opts, "name")
+		id := terraform.OutputContext(t, context.Background(), opts, "id")
+		owner := terraform.OutputContext(t, context.Background(), opts, "owner")
 		arnParts := strings.SplitN(arn, ":", 6)
 		require.Len(t, arnParts, 6, "ARN should have 6 sections")
 		nameFromArn := arnParts[5]
@@ -54,7 +54,7 @@ func TestComposableCompleteReadonly(t *testing.T, ctx types.TestContext) {
 
 	t.Run("TestSNSTopicViaAPI", func(t *testing.T) {
 		client := getSNSClient(t)
-		topicArn := terraform.Output(t, ctx.TerratestTerraformOptions(), "arn")
+		topicArn := terraform.OutputContext(t, context.Background(), ctx.TerratestTerraformOptions(), "arn")
 
 		out, err := client.GetTopicAttributes(context.Background(), &sns.GetTopicAttributesInput{
 			TopicArn: &topicArn,
@@ -67,10 +67,10 @@ func TestComposableCompleteReadonly(t *testing.T, ctx types.TestContext) {
 		require.True(t, ok, "KmsMasterKeyId must be present - encryption may not be configured")
 		require.NotEmpty(t, kmsKeyId, "KMS key ID should be set")
 
-		expectedKmsArn := terraform.Output(t, ctx.TerratestTerraformOptions(), "kms_key_arn")
+		expectedKmsArn := terraform.OutputContext(t, context.Background(), ctx.TerratestTerraformOptions(), "kms_key_arn")
 		assert.Equal(t, expectedKmsArn, kmsKeyId, "KMS key should match the key provisioned by Terraform")
 
-		expectedArn := terraform.Output(t, ctx.TerratestTerraformOptions(), "arn")
+		expectedArn := terraform.OutputContext(t, context.Background(), ctx.TerratestTerraformOptions(), "arn")
 		assert.Equal(t, expectedArn, topicArn, "Topic ARN should match Terraform output")
 	})
 }
